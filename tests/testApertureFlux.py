@@ -31,6 +31,7 @@ from lsst.meas.base import ApertureFluxAlgorithm
 from lsst.meas.base.tests import (AlgorithmTestCase, FluxTransformTestCase,
                                   SingleFramePluginTransformSetupHelper)
 
+
 class ApertureFluxTestCase(lsst.utils.tests.TestCase):
     """Test case for the ApertureFlux algorithm base class
     """
@@ -73,6 +74,7 @@ class ApertureFluxTestCase(lsst.utils.tests.TestCase):
                     area
                 )
                 # test that all the ways we could invoke naive flux measurement produce the expected result
+
                 def check(method, image):
                     result = method(image, ellipse, self.ctrl)
                     self.assertClose(result.flux, area)
@@ -92,7 +94,7 @@ class ApertureFluxTestCase(lsst.utils.tests.TestCase):
             lsst.afw.geom.ellipses.Ellipse(lsst.afw.geom.ellipses.Axes(12.0, 12.0),
                                            lsst.afw.geom.Point2D(25.0, -60.0)),
             self.ctrl
-            )
+        )
         self.assertTrue(invalid.getFlag(ApertureFluxAlgorithm.APERTURE_TRUNCATED))
         self.assertFalse(invalid.getFlag(ApertureFluxAlgorithm.SINC_COEFFS_TRUNCATED))
         self.assertTrue(numpy.isnan(invalid.flux))
@@ -115,6 +117,7 @@ class ApertureFluxTestCase(lsst.utils.tests.TestCase):
                     area
                 )
                 # test that all the ways we could invoke sinc flux measurement produce the expected result
+
                 def check(method, image):
                     result = method(image, ellipse, self.ctrl)
                     self.assertClose(result.flux, area, rtol=1E-3)
@@ -134,7 +137,7 @@ class ApertureFluxTestCase(lsst.utils.tests.TestCase):
             lsst.afw.geom.ellipses.Ellipse(lsst.afw.geom.ellipses.Axes(9.0, 9.0),
                                            lsst.afw.geom.Point2D(25.0, -60.0)),
             self.ctrl
-            )
+        )
         self.assertTrue(invalid1.getFlag(ApertureFluxAlgorithm.APERTURE_TRUNCATED))
         self.assertTrue(invalid1.getFlag(ApertureFluxAlgorithm.SINC_COEFFS_TRUNCATED))
         self.assertTrue(numpy.isnan(invalid1.flux))
@@ -144,10 +147,11 @@ class ApertureFluxTestCase(lsst.utils.tests.TestCase):
             lsst.afw.geom.ellipses.Ellipse(lsst.afw.geom.ellipses.Axes(9.0, 9.0),
                                            lsst.afw.geom.Point2D(30.0, -60.0)),
             self.ctrl
-            )
+        )
         self.assertFalse(invalid2.getFlag(ApertureFluxAlgorithm.APERTURE_TRUNCATED))
         self.assertTrue(invalid2.getFlag(ApertureFluxAlgorithm.SINC_COEFFS_TRUNCATED))
         self.assertFalse(numpy.isnan(invalid2.flux))
+
 
 class CircularApertureFluxTestCase(AlgorithmTestCase):
     """Test case for the CircularApertureFlux algorithm/plugin
@@ -246,11 +250,13 @@ class CircularApertureFluxTestCase(AlgorithmTestCase):
 
 
 class ApertureFluxTransformTestCase(FluxTransformTestCase, SingleFramePluginTransformSetupHelper):
+
     class circApFluxAlgorithmFactory(object):
         """
         Helper class to sub in an empty PropertyList as the final argument to
         CircularApertureFluxAlgorithm.
         """
+
         def __call__(self, control, name, inputSchema):
             return lsst.meas.base.CircularApertureFluxAlgorithm(control, name, inputSchema,
                                                                 lsst.daf.base.PropertyList())
@@ -265,7 +271,7 @@ class ApertureFluxTransformTestCase(FluxTransformTestCase, SingleFramePluginTran
     def testTransform(self):
         """Demonstrate application of the ApertureFluxTransform to a synthetic SourceCatalog."""
         FluxTransformTestCase.testTransform(self,
-            [ApertureFluxAlgorithm.makeFieldPrefix(self.name, r) for r in self.control.radii])
+                                            [ApertureFluxAlgorithm.makeFieldPrefix(self.name, r) for r in self.control.radii])
 
 
 def suite():
@@ -279,6 +285,7 @@ def suite():
     suites += unittest.makeSuite(ApertureFluxTransformTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

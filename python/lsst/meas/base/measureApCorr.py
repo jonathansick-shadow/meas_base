@@ -31,10 +31,11 @@ from .apCorrRegistry import getApCorrNameSet
 
 __all__ = ("MeasureApCorrConfig", "MeasureApCorrTask")
 
+
 class FluxKeys(object):
     """A collection of keys for a given flux measurement algorithm
     """
-    __slots__ = ("flux", "err", "flag", "used") # prevent accidentally adding fields
+    __slots__ = ("flux", "err", "flag", "used")  # prevent accidentally adding fields
 
     def __init__(self, name, schema):
         """Construct a FluxKeys
@@ -51,12 +52,13 @@ class FluxKeys(object):
                                     doc="set if source was used in measuring aperture correction")
 
 # The following block adds links to these tasks from the Task Documentation page.
-## \addtogroup LSST_task_documentation
-## \{
-## \page measBase_measureApCorrTask
-## \ref MeasureApCorrTask "MeasureApCorrTask"
-##      Task to measure aperture correction
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page measBase_measureApCorrTask
+# \ref MeasureApCorrTask "MeasureApCorrTask"
+# Task to measure aperture correction
+# \}
+
 
 class MeasureApCorrConfig(lsst.pex.config.Config):
     """!Configuration for MeasureApCorrTask
@@ -68,14 +70,14 @@ class MeasureApCorrConfig(lsst.pex.config.Config):
     )
     inputFilterFlag = lsst.pex.config.Field(
         doc = "Name of a flag field that indicates that a source should be used to constrain the" +
-             " aperture corrections",
+        " aperture corrections",
         dtype = str,
         default = "calib_psfUsed",
     )
     minDegreesOfFreedom = lsst.pex.config.RangeField(
         doc = "Minimum number of degrees of freedom (# of valid data points - # of parameters);" +
-             " if this is exceeded, the order of the fit is decreased (in both dimensions), and" +
-             " if we can't decrease it enough, we'll raise ValueError.",
+        " if this is exceeded, the order of the fit is decreased (in both dimensions), and" +
+        " if we can't decrease it enough, we'll raise ValueError.",
         dtype = int,
         default = 1,
         min = 1,
@@ -94,6 +96,7 @@ class MeasureApCorrConfig(lsst.pex.config.Config):
         dtype = float,
         default = 3.0,
     )
+
 
 class MeasureApCorrTask(Task):
     """!Task to measure aperture correction
@@ -135,7 +138,7 @@ class MeasureApCorrTask(Task):
         """
         Task.__init__(self, **kwds)
         self.refFluxKeys = FluxKeys(self.config.refFluxName, schema)
-        self.toCorrect = {} # dict of flux field name prefix: FluxKeys instance
+        self.toCorrect = {}  # dict of flux field name prefix: FluxKeys instance
         for name in getApCorrNameSet():
             try:
                 self.toCorrect[name] = FluxKeys(name, schema)
@@ -175,8 +178,8 @@ class MeasureApCorrTask(Task):
             if len(subset2) - 1 < self.config.minDegreesOfFreedom:
                 self.log.warn("Only %d sources for calculation of aperture correction for '%s'; "
                               "setting to 1.0" % (len(subset2), name,))
-                apCorrMap[fluxName] = ChebyshevBoundedField(bbox, numpy.ones((1,1), dtype=float))
-                apCorrMap[fluxSigmaName] = ChebyshevBoundedField(bbox, numpy.zeros((1,1), dtype=float))
+                apCorrMap[fluxName] = ChebyshevBoundedField(bbox, numpy.ones((1, 1), dtype=float))
+                apCorrMap[fluxSigmaName] = ChebyshevBoundedField(bbox, numpy.zeros((1, 1), dtype=float))
                 continue
 
             # If we don't have enough data points to constrain the fit, reduce the order until we do

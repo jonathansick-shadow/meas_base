@@ -36,6 +36,7 @@ try:
 except NameError:
     verbose = 0
 
+
 def makeWcs():
     """Provide a simple WCS for use in testing"""
     # The parameters given are placeholders; their values are unimportant
@@ -51,9 +52,11 @@ def makeWcs():
     md.set("EQUINOX", 2000.0)
     return afwImage.makeWcs(md)
 
+
 @pexConfig.wrap(testLib.SillyCentroidControl)
 class SillyCentroidConfig(pexConfig.Config):
     pass
+
 
 class TransformTestCase(utilsTests.TestCase):
     pluginName = "base_SillyCentroid"
@@ -140,7 +143,9 @@ class TransformTestCase(utilsTests.TestCase):
         sillyTransform(inCat, outCat, makeWcs(), afwImage.Calib())
         self._checkSillyOutputs(inCat, outCat)
 
+
 class AlgorithmConfigurationTestCase(utilsTests.TestCase):
+
     def testDefaultTransform(self):
         """By default, we perform no transformations"""
         self.assertEqual(measBase.BasePlugin.getTransformClass(), measBase.PassThroughTransform)
@@ -163,7 +168,6 @@ class AlgorithmConfigurationTestCase(utilsTests.TestCase):
         self.assertEqual(singleFrame.getTransformClass(), measBase.PassThroughTransform)
 
 
-
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -174,6 +178,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit=False):
     """Run the tests"""

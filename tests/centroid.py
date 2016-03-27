@@ -45,6 +45,7 @@ except NameError:
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+
 class CentroidTestCase(utilsTests.TestCase):
     """A test case for centroiding"""
 
@@ -131,6 +132,7 @@ class CentroidTestCase(utilsTests.TestCase):
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+
 class SingleFrameMeasurementTaskTestCase(utilsTests.TestCase):
     """A test case for the SingleFrameMeasurementTask"""
 
@@ -187,9 +189,9 @@ class MonetTestCase(unittest.TestCase):
     """A test case for centroiding using Dave Monet's 2-D Gaussian fitter"""
 
     def setUp(self):
-	im = afwImage.ImageF(self.monetFile("small.fits"))
+        im = afwImage.ImageF(self.monetFile("small.fits"))
         self.mi = afwImage.MaskedImageF(im, afwImage.MaskU(im.getDimensions()),
-                                        afwImage.ImageF(im.getDimensions()));
+                                        afwImage.ImageF(im.getDimensions()))
         self.ds = afwDetection.FootprintSet(self.mi, afwDetection.Threshold(100))
 
         if display:
@@ -207,8 +209,10 @@ class MonetTestCase(unittest.TestCase):
                 ds9.dot("+", xc, yc, ctype=ds9.BLUE)
 
                 if False:
-                    x0 -= 0.5; y0 -= 0.5
-                    x1 += 0.5; y1 += 0.5
+                    x0 -= 0.5
+                    y0 -= 0.5
+                    x1 += 0.5
+                    y1 += 0.5
 
                     ds9.line([(x0, y0), (x1, y0), (x1, y1), (x0, y1), (x0, y0)], ctype=ds9.RED)
         msConfig = measBase.SingleFrameMeasurementConfig()
@@ -258,7 +262,8 @@ class MonetTestCase(unittest.TestCase):
         ID = 1
         self.task.run(self.ssMeasured, exposure)
         for s in self.ssMeasured:
-            s.setId(ID); ID += 1
+            s.setId(ID)
+            ID += 1
             foot = s.getFootprint()
             bbox = foot.getBBox()
             xc = (bbox.getMinX() + bbox.getMaxX())//2
@@ -272,7 +277,7 @@ class MonetTestCase(unittest.TestCase):
 
         # FIXME: this test will fail until source matching in afw is updated to use afw/table
         mat = afwTable.matchXy(self.ssTruth, self.ssMeasured, 1.0)
-        #self.assertEqual(ID, len(mat))  # we matched all the input sources
+        # self.assertEqual(ID, len(mat))  # we matched all the input sources
 
         eps = 6e-6                      # offset in pixels between measured centroid and the Truth
         for match in mat:
@@ -288,6 +293,7 @@ class MonetTestCase(unittest.TestCase):
                 else:
                     self.assertTrue(good, msg)
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -299,6 +305,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit = False):
     """Run the tests"""

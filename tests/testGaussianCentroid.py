@@ -28,7 +28,9 @@ import lsst.meas.base.tests
 from lsst.meas.base.tests import (AlgorithmTestCase, CentroidTransformTestCase,
                                   SingleFramePluginTransformSetupHelper)
 
+
 class GaussianCentroidTestCase(AlgorithmTestCase):
+
     def setUp(self):
         self.center = lsst.afw.geom.Point2D(50.1, 49.8)
         self.bbox = lsst.afw.geom.Box2I(lsst.afw.geom.Point2I(-20, -30),
@@ -73,6 +75,7 @@ def suite():
     suites += unittest.makeSuite(GaussianCentroidTransformTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

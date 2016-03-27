@@ -100,6 +100,7 @@ def suite():
 
     return unittest.TestSuite(suites)
 
+
 def run(exit = False):
     """Run the tests"""
     lsst.utils.tests.run(suite(), exit)

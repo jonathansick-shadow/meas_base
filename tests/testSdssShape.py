@@ -30,6 +30,7 @@ import lsst.meas.base.tests
 from lsst.meas.base.tests import (AlgorithmTestCase, FluxTransformTestCase,
                                   CentroidTransformTestCase, SingleFramePluginTransformSetupHelper)
 
+
 class SdssShapeTestCase(AlgorithmTestCase):
 
     def setUp(self):
@@ -129,6 +130,7 @@ def suite():
     suites += unittest.makeSuite(SdssShapeTransformTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

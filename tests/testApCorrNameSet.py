@@ -26,6 +26,7 @@ import unittest
 import lsst.utils.tests
 import lsst.meas.base
 
+
 class ApCorrNameTestCase(unittest.TestCase):
 
     def testDefaultNames(self):
@@ -72,7 +73,6 @@ class ApCorrNameTestCase(unittest.TestCase):
         self.assertFalse("test_NonApCorrPlugin" in apCorrSet)
 
 
-
 def suite():
     """Returns a suite containing all the test cases in this module."""
 
@@ -82,6 +82,7 @@ def suite():
     suites += unittest.makeSuite(ApCorrNameTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

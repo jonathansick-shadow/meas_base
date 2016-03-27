@@ -29,6 +29,7 @@ from .forcedPhotImage import ProcessImageForcedConfig, ProcessImageForcedTask
 
 __all__ = ("ForcedPhotCoaddConfig", "ForcedPhotCoaddTask")
 
+
 class ForcedPhotCoaddConfig(ProcessImageForcedConfig):
     footprintDatasetName = lsst.pex.config.Field(
         doc = ("Dataset (without coadd prefix) that should be used to obtain (Heavy)Footprints for sources."
@@ -46,16 +47,17 @@ class ForcedPhotCoaddConfig(ProcessImageForcedConfig):
     def validate(self):
         ProcessImageForcedTask.ConfigClass.validate(self)
         if (self.measurement.doReplaceWithNoise and self.footprintDatasetName is not None
-            and self.references.removePatchOverlaps):
+                and self.references.removePatchOverlaps):
             raise ValueError("Cannot use removePatchOverlaps=True with deblended footprints, as parent "
                              "sources may be rejected while their children are not.")
 
-## @addtogroup LSST_task_documentation
-## @{
-## @page processForcedCoaddTask
-## ForcedPhotCoaddTask
-## @copybrief ForcedPhotCoaddTask
-## @}
+# @addtogroup LSST_task_documentation
+# @{
+# @page processForcedCoaddTask
+# ForcedPhotCoaddTask
+# @copybrief ForcedPhotCoaddTask
+# @}
+
 
 class ForcedPhotCoaddTask(ProcessImageForcedTask):
     """!

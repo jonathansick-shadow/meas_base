@@ -44,19 +44,20 @@ except NameError:
 
 
 class VarianceTest(unittest.TestCase):
+
     def testVariance(self):
-        size = 128 # size of image (pixels)
-        center = afwGeom.Point2D(size//2, size//2) # object center
-        width = 2.0 # PSF width
-        flux = 10.0 # Flux of object
-        variance = 1.0 # Mean variance value
-        varianceStd = 0.1 # Standard deviation of the variance value
-        
+        size = 128  # size of image (pixels)
+        center = afwGeom.Point2D(size//2, size//2)  # object center
+        width = 2.0  # PSF width
+        flux = 10.0  # Flux of object
+        variance = 1.0  # Mean variance value
+        varianceStd = 0.1  # Standard deviation of the variance value
+
         # Set a seed for predictable randomness
         np.random.seed(300)
 
         # Create a random image to be used as variance plane
-        variancePlane = np.random.normal(variance, varianceStd, size*size).reshape(size,size)
+        variancePlane = np.random.normal(variance, varianceStd, size*size).reshape(size, size)
 
         # Initial setup of an image
         exp = afwImage.ExposureF(size, size)
@@ -65,7 +66,7 @@ class VarianceTest(unittest.TestCase):
         var = exp.getMaskedImage().getVariance()
         image.set(0.0)
         mask.set(0)
-        var.getArray()[:,:] = variancePlane
+        var.getArray()[:, :] = variancePlane
 
         # Put down a PSF
         psfSize = int(6*width + 1)  # Size of PSF image; must be odd
@@ -162,6 +163,7 @@ class VarianceTest(unittest.TestCase):
 
 ##############################################################################################################
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -170,6 +172,7 @@ def suite():
     suites += unittest.makeSuite(VarianceTest)
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(exit = False):
     """Run the utilsTests"""

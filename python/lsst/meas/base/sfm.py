@@ -36,11 +36,13 @@ from .noiseReplacer import NoiseReplacer, DummyNoiseReplacer
 __all__ = ("SingleFramePluginConfig", "SingleFramePlugin",
            "SingleFrameMeasurementConfig", "SingleFrameMeasurementTask")
 
+
 class SingleFramePluginConfig(BasePluginConfig):
     """!
     Base class for configs of single-frame plugin algorithms.
     """
     pass
+
 
 class SingleFramePlugin(BasePlugin):
     """!
@@ -106,6 +108,7 @@ class SingleFramePlugin(BasePlugin):
         """
         raise NotImplementedError()
 
+
 class SingleFrameMeasurementConfig(BaseMeasurementConfig):
     """!
     Config class for single frame measurement driver task.
@@ -126,15 +129,16 @@ class SingleFrameMeasurementConfig(BaseMeasurementConfig):
                  "base_Variance",
                  ],
         doc="Plugins to be run and their configuration"
-        )
+    )
     algorithms = property(lambda self: self.plugins, doc="backwards-compatibility alias for plugins")
 
-## \addtogroup LSST_task_documentation
-## \{
-## \page SingleFrameMeasurementTask
-## \ref SingleFrameMeasurementTask_ "SingleFrameMeasurementTask"
-## \copybrief SingleFrameMeasurementTask
-## \}
+# \addtogroup LSST_task_documentation
+# \{
+# \page SingleFrameMeasurementTask
+# \ref SingleFrameMeasurementTask_ "SingleFrameMeasurementTask"
+# \copybrief SingleFrameMeasurementTask
+# \}
+
 
 class SingleFrameMeasurementTask(BaseMeasurementTask):
     """!
@@ -256,7 +260,7 @@ class SingleFrameMeasurementTask(BaseMeasurementTask):
             self.doBlendedness = False
 
     def run(self, measCat, exposure, noiseImage=None, exposureId=None, beginOrder=None, endOrder=None,
-        allowApCorr=True):
+            allowApCorr=True):
         """!
         Run single frame measurement over an exposure and source catalog
 
@@ -284,7 +288,7 @@ class SingleFrameMeasurementTask(BaseMeasurementTask):
             measCat = temp
         assert measCat.getSchema().contains(self.schema)
         footprints = {measRecord.getId(): (measRecord.getParent(), measRecord.getFootprint())
-            for measRecord in measCat}
+                      for measRecord in measCat}
 
         # noiseReplacer is used to fill the footprints with noise and save heavy footprints
         # of the source pixels so that they can be restored one at a time for measurement.
@@ -319,7 +323,7 @@ class SingleFrameMeasurementTask(BaseMeasurementTask):
                 self.callMeasure(measChildRecord, exposure, beginOrder=beginOrder, endOrder=endOrder)
 
                 if self.doBlendedness:
-                     self.blendPlugin.cpp.measureChildPixels(exposure.getMaskedImage(), measChildRecord)
+                    self.blendPlugin.cpp.measureChildPixels(exposure.getMaskedImage(), measChildRecord)
 
                 noiseReplacer.removeSource(measChildRecord.getId())
 
@@ -332,7 +336,7 @@ class SingleFrameMeasurementTask(BaseMeasurementTask):
 
                 # Finally, process both the parent and the child set through measureN
             self.callMeasureN(measParentCat[parentIdx:parentIdx+1], exposure,
-                    beginOrder=beginOrder, endOrder=endOrder)
+                              beginOrder=beginOrder, endOrder=endOrder)
             self.callMeasureN(measChildCat, exposure, beginOrder=beginOrder, endOrder=endOrder)
             noiseReplacer.removeSource(measParentRecord.getId())
         # when done, restore the exposure to its original state
@@ -343,7 +347,6 @@ class SingleFrameMeasurementTask(BaseMeasurementTask):
         for source in measCat:
             if self.doBlendedness:
                 self.blendPlugin.cpp.measureParentPixels(exposure.getMaskedImage(), source)
-
 
         if allowApCorr:
             self._applyApCorrIfWanted(

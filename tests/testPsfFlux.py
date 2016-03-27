@@ -34,6 +34,7 @@ import lsst.meas.base.tests
 from lsst.meas.base.tests import (AlgorithmTestCase, FluxTransformTestCase,
                                   SingleFramePluginTransformSetupHelper)
 
+
 class PsfFluxTestCase(AlgorithmTestCase):
 
     def setUp(self):
@@ -61,7 +62,7 @@ class PsfFluxTestCase(AlgorithmTestCase):
         algorithm, schema = self.makeAlgorithm()
         exposure, catalog = self.dataset.realize(10.0, schema)
         record = catalog[0]
-        badPoint = lsst.afw.geom.Point2I(self.center) + lsst.afw.geom.Extent2I(3,4)
+        badPoint = lsst.afw.geom.Point2I(self.center) + lsst.afw.geom.Extent2I(3, 4)
         imageArray = exposure.getMaskedImage().getImage().getArray()
         maskArray = exposure.getMaskedImage().getMask().getArray()
         badMask = exposure.getMaskedImage().getMask().getPlaneBitMask("BAD")
@@ -78,7 +79,7 @@ class PsfFluxTestCase(AlgorithmTestCase):
         self.assertClose(record.get("base_PsfFlux_flux"), record.get("truth_flux"),
                          atol=3*record.get("base_PsfFlux_fluxSigma"))
         # If we mask the whole image, we should get a MeasurementError
-        maskArray[:,:] |= badMask
+        maskArray[:, :] |= badMask
         with self.assertRaises(lsst.meas.base.MeasurementError) as context:
             algorithm.measure(record, exposure)
         self.assertEqual(context.exception.getFlagBit(), lsst.meas.base.PsfFluxAlgorithm.NO_GOOD_PIXELS)
@@ -187,6 +188,7 @@ def suite():
     suites += unittest.makeSuite(PsfFluxTransformTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

@@ -37,36 +37,38 @@ from .forcedMeasurement import ForcedMeasurementTask
 
 __all__ = ("ProcessImageForcedConfig", "ProcessImageForcedTask")
 
+
 class ProcessImageForcedConfig(lsst.pex.config.Config):
     """!Config class for forced measurement driver task."""
 
     references = lsst.pex.config.ConfigurableField(
         target=MultiBandReferencesTask,
         doc="subtask to retrieve reference source catalog"
-        )
+    )
     measurement = lsst.pex.config.ConfigurableField(
         target=ForcedMeasurementTask,
         doc="subtask to do forced measurement"
-        )
+    )
     coaddName = lsst.pex.config.Field(
         doc = "coadd name: typically one of deep or goodSeeing",
         dtype = str,
         default = "deep",
-        )
+    )
     copyColumns = lsst.pex.config.DictField(
         keytype=str, itemtype=str, doc="Mapping of reference columns to source columns",
         default={"id": "objectId", "parent": "parentObjectId", "deblend_nChild": "deblend_nChild"}
-        )
+    )
 
     def setDefaults(self):
         self.measurement.doApplyApCorr = "yes"
 
-## @addtogroup LSST_task_documentation
-## @{
-## @page ProcessImageForcedTask
-## ProcessImageForcedTask
-## @copybrief ProcessImageForcedTask
-## @}
+# @addtogroup LSST_task_documentation
+# @{
+# @page ProcessImageForcedTask
+# ProcessImageForcedTask
+# @copybrief ProcessImageForcedTask
+# @}
+
 
 class ProcessImageForcedTask(lsst.pipe.base.CmdLineTask):
     """!A base class for command-line forced measurement drivers.
@@ -198,7 +200,7 @@ class ProcessImageForcedTask(lsst.pipe.base.CmdLineTask):
         catalog = lsst.afw.table.SourceCatalog(self.measurement.mapper.getOutputSchema())
         catalog.getTable().setMetadata(self.measurement.algMetadata)
         datasetType = self.dataPrefix + "forced_src"
-        return {datasetType:catalog}
+        return {datasetType: catalog}
 
     def _getConfigName(self):
         """!Return the name of the config dataset.  Forces config comparison from run-to-run

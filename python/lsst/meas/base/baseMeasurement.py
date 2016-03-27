@@ -38,6 +38,7 @@ __all__ = ("BasePluginConfig", "BasePlugin", "BaseMeasurementConfig", "BaseMeasu
 # Exceptions that the measurement tasks should always propagate up to their callers
 FATAL_EXCEPTIONS = (MemoryError, FatalAlgorithmError)
 
+
 class BasePluginConfig(lsst.pex.config.Config):
     """!
     Base class measurement Plugin config classes.
@@ -54,6 +55,7 @@ class BasePluginConfig(lsst.pex.config.Config):
                                       doc="whether to run this plugin in single-object mode")
 
     doMeasureN = False  # replace this class attribute with a Field if measureN-capable
+
 
 class BasePlugin(object):
     """!
@@ -173,13 +175,21 @@ class SourceSlotConfig(lsst.pex.config.Config):
         to construct a Task object.
         """
         aliases = schema.getAliasMap()
-        if self.centroid is not None: aliases.set("slot_Centroid", self.centroid)
-        if self.shape is not None: aliases.set("slot_Shape", self.shape)
-        if self.apFlux is not None: aliases.set("slot_ApFlux", self.apFlux)
-        if self.modelFlux is not None: aliases.set("slot_ModelFlux", self.modelFlux)
-        if self.psfFlux is not None: aliases.set("slot_PsfFlux", self.psfFlux)
-        if self.instFlux is not None: aliases.set("slot_InstFlux", self.instFlux)
-        if self.calibFlux is not None: aliases.set("slot_CalibFlux", self.calibFlux)
+        if self.centroid is not None:
+            aliases.set("slot_Centroid", self.centroid)
+        if self.shape is not None:
+            aliases.set("slot_Shape", self.shape)
+        if self.apFlux is not None:
+            aliases.set("slot_ApFlux", self.apFlux)
+        if self.modelFlux is not None:
+            aliases.set("slot_ModelFlux", self.modelFlux)
+        if self.psfFlux is not None:
+            aliases.set("slot_PsfFlux", self.psfFlux)
+        if self.instFlux is not None:
+            aliases.set("slot_InstFlux", self.instFlux)
+        if self.calibFlux is not None:
+            aliases.set("slot_CalibFlux", self.calibFlux)
+
 
 class BaseMeasurementConfig(lsst.pex.config.Config):
     """!
@@ -189,26 +199,26 @@ class BaseMeasurementConfig(lsst.pex.config.Config):
     slots = lsst.pex.config.ConfigField(
         dtype = SourceSlotConfig,
         doc="Mapping from algorithms to special aliases in Source."
-        )
+    )
 
     doReplaceWithNoise = lsst.pex.config.Field(dtype=bool, default=True, optional=False,
-        doc='When measuring, replace other detected footprints with noise?')
+                                               doc='When measuring, replace other detected footprints with noise?')
 
     noiseReplacer = lsst.pex.config.ConfigField(
         dtype=NoiseReplacerConfig,
         doc="configuration that sets how to replace neighboring sources with noise"
-        )
+    )
 
     doApplyApCorr = lsst.pex.config.ChoiceField(
         dtype = str,
         doc = "Apply aperture corrections? Silently ignored if endOrder <= lsst.meas.base.APCORR_ORDER"
-            " when calling run",
+        " when calling run",
         default = "noButWarn",
         allowed = {
             "yes": "apply aperture corrections; fail if data not available",
             "yesOrWarn": "apply aperture corrections if data available, else warn",
             "noButWarn": "do not apply aperture corrections, but warn if data available"
-                " (since aperture corrections could have been applied)",
+            " (since aperture corrections could have been applied)",
             "no": "do not apply aperture corrections",
         },
     )
@@ -216,7 +226,7 @@ class BaseMeasurementConfig(lsst.pex.config.Config):
     applyApCorr = lsst.pex.config.ConfigurableField(
         target = ApplyApCorrTask,
         doc = "subtask to apply aperture corrections",
-        )
+    )
 
     def validate(self):
         lsst.pex.config.Config.validate(self)
@@ -233,11 +243,12 @@ class BaseMeasurementConfig(lsst.pex.config.Config):
                 else:
                     raise ValueError("source flux slot algorithm '%s' is not being run." % slot)
 
-## @addtogroup LSST_task_documentation
-## @{
-## @page baseMeasurementTask
-## BaseMeasurementTask @copybrief BaseMeasurementTask
-## @}
+# @addtogroup LSST_task_documentation
+# @{
+# @page baseMeasurementTask
+# BaseMeasurementTask @copybrief BaseMeasurementTask
+# @}
+
 
 class BaseMeasurementTask(lsst.pipe.base.Task):
     """!
@@ -420,6 +431,6 @@ class BaseMeasurementTask(lsst.pipe.base.Task):
         elif self.config.doApplyApCorr == "noButWarn":
             if apCorrMap is not None:
                 self.log.warn("Aperture corrections are disabled but the data to apply them is available;"
-                    " change doApplyApCorr to suppress this warning")
+                              " change doApplyApCorr to suppress this warning")
 
 

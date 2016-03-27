@@ -40,6 +40,7 @@ except NameError:
     verbose = 0
     display = False
 
+
 def makePluginAndCat(alg, name, control, metadata=False, centroid=None):
     schema = afwTable.SourceTable.makeMinimalSchema()
     if centroid:
@@ -55,6 +56,7 @@ def makePluginAndCat(alg, name, control, metadata=False, centroid=None):
     return plugin, cat
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 
 class ShapeTestCase(unittest.TestCase):
     """A test case for centroiding"""
@@ -73,10 +75,14 @@ class ShapeTestCase(unittest.TestCase):
         """Test that we can instantiate and play with a measureShape"""
 
         im = afwImage.ImageF(afwGeom.ExtentI(100))
-        msk = afwImage.MaskU(im.getDimensions()); msk.set(0)
-        var = afwImage.ImageF(im.getDimensions()); var.set(10)
+        msk = afwImage.MaskU(im.getDimensions())
+        msk.set(0)
+        var = afwImage.ImageF(im.getDimensions())
+        var.set(10)
         mi = afwImage.MaskedImageF(im, msk, var)
-        del im; del msk; del var
+        del im
+        del msk
+        del var
         exp = afwImage.makeExposure(mi)
 
         bkgd = 100.0
@@ -84,8 +90,8 @@ class ShapeTestCase(unittest.TestCase):
         control.background = bkgd
         control.maxShift = 2
         plugin, cat = makePluginAndCat(measBase.SdssShapeAlgorithm, "test", control, centroid="centroid")
-        
-        #cat.defineCentroid("test")
+
+        # cat.defineCentroid("test")
         cat.defineShape("test")
         #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
         #
@@ -93,19 +99,19 @@ class ShapeTestCase(unittest.TestCase):
         #
         for a, b, phi, tol in [              # n.b. phi in degrees
             (2.5, 1.5, 90.0, 1e-3),
-            (1.5, 2.5,  0.0, 1e-3),
+            (1.5, 2.5, 0.0, 1e-3),
             (1.5, 2.5, 45.0, 1e-3),
             (1.5, 2.5, 90.0, 1e-3),
 
-            (3.0, 2.5,  0.0, 1e-3),
+            (3.0, 2.5, 0.0, 1e-3),
 
             (3.0, 12.5, 0.0, 1e-3),
             (3.0, 12.5, 0.0, 2e-4),
 
-            (1.0,   1.0, 0.0, 4e-3),
-            (1.0,  0.75, 0.0, 2e-2),
+            (1.0, 1.0, 0.0, 4e-3),
+            (1.0, 0.75, 0.0, 2e-2),
             #(0.75, 0.75, 0.0, 1e-1),
-            ]:
+        ]:
             if b > a:
                 a, b = b, a
                 phi -= 90
@@ -130,7 +136,7 @@ class ShapeTestCase(unittest.TestCase):
             sum, sumxx, sumxy, sumyy = 4*[0.0] if False else 4*[None]
             for dx in range(-ksize/2, ksize/2 + 1):
                 for dy in range(-ksize/2, ksize/2 + 1):
-                    u, v = c*dx + s*dy,  s*dx - c*dy
+                    u, v = c*dx + s*dy, s*dx - c*dy
                     I = 1000*math.exp(-0.5*((u/a)**2 + (v/b)**2))
                     im[x + dx, y + dy] += I
 
@@ -141,7 +147,9 @@ class ShapeTestCase(unittest.TestCase):
                         sumyy += I*dy*dy
 
             if sum is not None:
-                sumxx /= sum; sumxy /= sum; sumyy /= sum
+                sumxx /= sum
+                sumxy /= sum
+                sumyy /= sum
                 print "RHL %g %g %g" % (sumxx, sumyy, sumxy)
 
             if display:
@@ -156,8 +164,8 @@ class ShapeTestCase(unittest.TestCase):
 
             if False:
                 Ixx, Iyy, Ixy = source.getIxx(), source.getIyy(), source.getIxy()
-                A2 = 0.5*(Ixx + Iyy) + math.sqrt( (0.5*(Ixx - Iyy))**2 + Ixy**2 )
-                B2 = 0.5*(Ixx + Iyy) - math.sqrt( (0.5*(Ixx - Iyy))**2 + Ixy**2 )
+                A2 = 0.5*(Ixx + Iyy) + math.sqrt((0.5*(Ixx - Iyy))**2 + Ixy**2)
+                B2 = 0.5*(Ixx + Iyy) - math.sqrt((0.5*(Ixx - Iyy))**2 + Ixy**2)
 
                 print "I_xx:  %.5f %.5f" % (Ixx, sigma_xx)
                 print "I_xy:  %.5f %.5f" % (Ixy, sigma_xy)
@@ -182,6 +190,7 @@ class ShapeTestCase(unittest.TestCase):
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -191,6 +200,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(exit = False):
     """Run the tests"""

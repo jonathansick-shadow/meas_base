@@ -26,6 +26,7 @@ import unittest
 import lsst.utils.tests
 import lsst.meas.base.tests
 
+
 class ClassificationTestCase(lsst.meas.base.tests.AlgorithmTestCase):
 
     def setUp(self):
@@ -70,8 +71,8 @@ class ClassificationTestCase(lsst.meas.base.tests.AlgorithmTestCase):
         config.slots.modelFlux = "base_GaussianFlux"
 
         def runFlagTest(psfFlux=100.0, modelFlux=200.0,
-                       psfFluxSigma=1.0, modelFluxSigma=2.0,
-                       psfFluxFlag=False, modelFluxFlag=False):
+                        psfFluxSigma=1.0, modelFluxSigma=2.0,
+                        psfFluxFlag=False, modelFluxFlag=False):
             task = self.makeSingleFrameMeasurementTask(config=config)
             exposure, catalog = self.dataset.realize(10.0, task.schema)
             source = catalog[0]
@@ -111,6 +112,7 @@ class ClassificationTestCase(lsst.meas.base.tests.AlgorithmTestCase):
         config.plugins["base_ClassificationExtendedness"].psfErrFactor = 1.
         self.assertTrue(runFlagTest(psfFluxSigma=float("NaN")))
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
 
@@ -120,6 +122,7 @@ def suite():
     suites += unittest.makeSuite(ClassificationTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""
